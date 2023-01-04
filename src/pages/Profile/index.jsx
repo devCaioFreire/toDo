@@ -95,7 +95,7 @@ export default function Profile() {
     async function handleSave(e) {
         e.preventDefault();
 
-        if (name !== '' && lastName !== '') {
+        if (name !== '' && lastName !== '' && avatars === null) {
             await firebase.firestore().collection('users').doc(user.uid).update({
                 name: name,
                 lastName: lastName,
