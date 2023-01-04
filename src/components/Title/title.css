@@ -1,0 +1,33 @@
+.title-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 1rem 0;
+    border-radius: 0.5rem;
+    padding: 0.8rem;
+    background-color: #1E1F23;
+    box-shadow: 3px 5px 10px 2px rgba(0, 0, 0, 0.5);
+    color: #d9d9d9;
+    letter-spacing: 0.1rem;
+}
+
+.title-row span {
+    margin-left: 1rem;
+    font-size: 1.2rem;
+}
+
+.title-row svg {
+    margin-left: 1rem;
+}
+
+.container-title {
+    margin-left: 13rem;
+    padding: 0.1px 1rem;
+}
+
+@media (max-width: 700px) {
+    .title-row {
+        margin-top: 2rem;
+        width: 100%;
+    }
+}

@@ -1,0 +1,98 @@
+.container-profile {
+    display: flex;
+    background-color: #1E1F23;
+    padding: 3rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    box-shadow: 3px 5px 10px 2px rgba(0, 0, 0, 0.5);
+}
+
+.form-profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-profile img {
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    object-fit: cover;
+    width: 250px;
+    height: 250px;
+}
+
+.avatar-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 300px;
+    height: 300px;
+    cursor: pointer;
+    margin-right: 3rem;
+    transition: all .5s;
+}
+
+.avatar-label:hover {
+    opacity: 0.5;
+}
+
+.avatar-label input {
+    display: none;
+}
+
+.avatar-label span {
+    z-index: 99;
+    position: absolute;
+    opacity: 0.2;
+    transition: all .5s;
+}
+
+.avatar-label span:hover {
+    transform: scale(1.2);
+    opacity: 1;
+}
+
+.form-inputs {
+    display: flex;
+    flex-direction: column;
+    width: 30rem;
+    color: var(--light-grey);
+}
+
+.form-inputs label {
+    margin-bottom: .5rem;
+    font-weight: 600;
+}
+
+.form-inputs input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: var(--light-grey);
+    border-bottom: 1px solid var(--light-grey);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-inputs input[type=email] {
+    cursor: not-allowed;
+}
+
+.form-inputs button {
+    padding: .4rem;
+    border: none;
+    background-color: #0A2241;
+    border-radius: .3rem;
+    color: var(--white);
+    cursor: pointer;
+    font-size: .9rem;
+    font-weight: 500;
+    transition: all .5s;
+}
+
+.form-inputs button:hover {
+    background-color: #0F2651;
+    box-shadow: 3px 5px 10px 2px rgba(0, 0, 0, 0.5);
+}
