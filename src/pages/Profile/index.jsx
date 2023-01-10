@@ -14,6 +14,7 @@ export default function Profile() {
 
     const { user, setUser, storageUser } = useContext(AuthContext);
 
+    const [nickname, setNickname] = useState(user && user.nick);
     const [name, setName] = useState(user && user.name);
     const [lastName, setLastName] = useState(user && user.lastName);
     const [email, setEmail] = useState(user && user.email);
@@ -57,7 +58,6 @@ export default function Profile() {
             .ref(`images/${currentUid}/${avatars.name}`)
             .put(avatars)
             .then(async () => {
-                alert('Imagem enviada com sucesso!')
 
                 // Pegando a URL da imagem
                 await firebase.storage()
@@ -74,6 +74,7 @@ export default function Profile() {
                             .doc(user.uid)
                             .update({
                                 avatar: urlAvatar,
+                                nick: nickname,
                                 name: name,
                                 lastName: lastName
                             })
@@ -81,6 +82,7 @@ export default function Profile() {
                                 let data = {
                                     ...user,
                                     avatar: urlAvatar,
+                                    nick: nickname,
                                     name: name,
                                     lastName: lastName
                                 }
@@ -97,12 +99,14 @@ export default function Profile() {
 
         if (name !== '' && lastName !== '' && avatars === null) {
             await firebase.firestore().collection('users').doc(user.uid).update({
+                nick: nickname,
                 name: name,
                 lastName: lastName,
             })
                 .then(() => {
                     let data = {
                         ...user,
+                        nick: nickname,
                         name: name,
                         lastName: lastName,
                     };
@@ -140,10 +144,12 @@ export default function Profile() {
                                 :
                                 <img src={userAvatar} width={250} height={250} />
                             }
-
                         </label>
 
                         <div className="form-inputs">
+
+                            <label>Nickname</label>
+                            <input type="text" value={nickname} placeholder={'Como prefere ser chamado?'} onChange={(nick) => setNickname(nick.target.value)} />
 
                             <label>Nome</label>
                             <input type="text" value={name} onChange={(name) => setName(name.target.value)} />
@@ -158,6 +164,42 @@ export default function Profile() {
                         </div>
                     </form>
                 </div>
+
+                <div className="settings-nav">
+
+                    <h3>Escolha a cor do tema</h3>
+
+                    <div className="color">
+
+                        <div className="sidebarColor">
+                            <label>Sidebar</label>
+                            <input type="color" value={'#1B1B1B'} id="sidebarColor" />
+                        </div>
+
+                        <div className="font-color">
+                            <label>Font</label>
+                            <input type="color" value={'#D9D9D9'} id="fontColor" />
+                        </div>
+
+                        <div className="theme">
+                            <label>Tema</label>
+                            <input type="color" value={'#1E1F23'} id="themeColor" />
+                        </div>
+
+                        <div className="btns">
+                            <label>Botões</label>
+                            <input type="color" value={'#0A2241'} id="btnColor" />
+                        </div>
+
+                    </div>
+
+                    <div className="areaBtn">
+                        <button>Restaurar</button>
+                        <button>Salvar</button>
+                    </div>
+
+                </div>
+
             </div>
         </div>
     )

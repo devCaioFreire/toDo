@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import './header.css';
 
 import { FaTasks } from 'react-icons/fa';
-import { RiShieldUserFill } from 'react-icons/ri';
+import { RiShieldUserFill, RiListSettingsLine } from 'react-icons/ri';
 import { RiDashboard2Fill } from 'react-icons/ri'
 
 export default function Header() {
@@ -17,7 +17,7 @@ export default function Header() {
 
             <div className='image'>
                 <img src={user.avatar == null ? avatarDefault : user.avatar} alt={'Avatar User'} />
-                <p className="text-img">Olá, <span>{user.name} {user.lastName}</span> </p>
+                <p className="text-img">Olá, <span>{user.nick !== '' ? user.nick : user.name + ' ' + user.lastName}</span> </p>
             </div>
 
             <Link to={'/dashboard'}>
@@ -30,9 +30,14 @@ export default function Header() {
                 Tarefas
             </Link>
 
+            <Link to={'/config'}>
+                <RiListSettingsLine color='#d9d9d9' size={24} />
+                Configurar Tarefas
+            </Link>
+
             <Link to={'/profile'}>
                 <RiShieldUserFill color='#d9d9d9' size={24} />
-                Configuração
+                Perfil
             </Link>
 
             <div className="logout">

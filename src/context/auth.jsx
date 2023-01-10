@@ -88,6 +88,7 @@ export default function AuthProvider({ children }) {
                     .doc(uid).set({
                         name: name,
                         lastName: lastName,
+                        nick: '',
                         email: email,
                         avatar: null
                     })
@@ -98,9 +99,14 @@ export default function AuthProvider({ children }) {
                             uid: uid,
                             name: name,
                             lastName: lastName,
+                            nick: '',
                             email: value.user.email,
                             avatarUrl: null
                         }
+                        // Mudando info do user
+                        setUser(data);
+                        // Adicionando dados na memória
+                        storageUser(data);
                         navigate('/dashboard')
                     })
             })
