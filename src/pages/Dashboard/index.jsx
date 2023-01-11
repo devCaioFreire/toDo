@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import './dashboard.css';
 import Header from '../../components/Header';
 import Title from '../../components/Title';
+import firebase from '../../service/firebaseConnection';
+import { AuthContext } from '../../context/auth';
+import { format } from 'date-fns';
 
 import { RiDashboardFill, RiSearchEyeFill, RiEditBoxFill } from 'react-icons/ri';
 import { BsPlus } from 'react-icons/bs';
@@ -9,8 +12,58 @@ import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
 
-    const [tasks, setTasks] = useState([0]);
+    const { user } = useContext(AuthContext);
+    const currentUID = user.uid;
+
+    const ref = firebase.firestore().collection('calls').doc(`${currentUID}`).collection('calls').orderBy('created', 'desc');
+    // const query = ref.where().orderBy('created', 'desc').limit(5);
+
+    const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
+    // const [calls, setCalls] = useState([]);
+    // const [doc, setDoc] = useState();
+
+    useEffect(() => {
+        async function loadCalls() {
+            await ref.limit(5).get().then((snapshot) => {
+                updateState(snapshot)
+            })
+                .catch((error) => {
+                    console.log('Erro ao buscar', error);
+                    setLoading(false)
+                })
+            setLoading(false);
+        }
+
+        loadCalls();
+
+    }, [])
+
+    async function updateState(snapshot) {
+        const isCollectionEmpty = snapshot.size === 0;
+
+        if (!isCollectionEmpty) {
+
+            let list = [];
+
+            snapshot.forEach((doc) => {
+                list.push({
+                    id: doc.id,
+                    customerID: doc.data().customerId,
+                    subjectMatter: doc.data().subMatter,
+                    customer: doc.data().customer,
+                    status: doc.data().status,
+                    created: doc.data().created,
+                    createdFormat: format(doc.data().created.toDate(), 'dd/MM/yyyy'),
+                    description: doc.data().description
+                })
+            })
+            // const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+            setTasks(list);
+            // setDoc(lastDoc);
+        }
+        setLoading(false);
+    }
 
     return (
         <div>
@@ -50,12 +103,12 @@ export default function Dashboard() {
                                 {tasks.map((item, index) => {
                                     return (
                                         <tr key={index}>
-                                            <td data-label='Cliente'>Caio Freire</td>
-                                            <td data-label='Assunto'>Manutenção de Código</td>
+                                            <td data-label='Cliente'>{item.customer}</td>
+                                            <td data-label='Assunto'>{item.subjectMatter}</td>
                                             <td data-label='Status'>
-                                                <span className='badge' style={{ backgroundColor: item.status === 'Open' ? '#1BCF6C' || item.status === 'Progress' : '#999' || '#ff0' }}>Aberto</span>
+                                                <span className='badge' style={{ backgroundColor: item.status === 'Open' ? '#1BCF6C' : item.status === 'Progress' ? '#0F2651' : '#999' }}>{item.status}</span>
                                             </td>
-                                            <td data-label='Assunto'>10/01/2023</td>
+                                            <td data-label='Data'>{item.createdFormat}</td>
                                             <td data-label='#'>
                                                 <button className='action' style={{ backgroundColor: '#0A2241' }} onClick={() => togglePostModal(item)}>
                                                     <RiSearchEyeFill color='#fff' size={17} />
