@@ -6,6 +6,7 @@ import firebase from '../../service/firebaseConnection';
 import { AuthContext } from '../../context/auth';
 
 import { BsPlus } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function Task() {
@@ -14,12 +15,14 @@ export default function Task() {
 
     const currentUid = user.uid;
 
+    const navigate = useNavigate();
+
     const [loading, setLoading] = useState(true);
     const [customers, setCustomers] = useState([]);
     const [customersSelected, setCustomersSelected] = useState([0])
     const [subjectMatter, setSubjectMatter] = useState([]);
     const [subjectMatterSelected, setSubjectMatterSelected] = useState([0])
-    const [status, setStatus] = useState('Open');
+    const [status, setStatus] = useState('Aberto');
     const [description, setDescription] = useState('');
 
     // Buscar Clientes
@@ -89,6 +92,7 @@ export default function Task() {
                 setCustomersSelected(0);
                 setSubjectMatterSelected(0);
                 setDescription('');
+                navigate('/dashboard');
             })
     }
 
@@ -139,20 +143,20 @@ export default function Task() {
                         <label>Status</label>
                         <div className="status">
 
-                            <input type="radio" name="radio" id="radio" value={'Open'} checked={status === 'Open'} onChange={(e) => setStatus(e.target.value)} />
+                            <input type="radio" name="radio" id="radio" value={'Aberto'} checked={status === 'Aberto'} onChange={(e) => setStatus(e.target.value)} />
                             <span>Aberto</span>
 
-                            <input type="radio" name="radio" id="radio" value={'Progress'} checked={status === 'Progress'} onChange={(e) => setStatus(e.target.value)} />
+                            <input type="radio" name="radio" id="radio" value={'Em Progresso'} checked={status === 'Em Progresso'} onChange={(e) => setStatus(e.target.value)} />
                             <span>Em progresso</span>
 
-                            <input type="radio" name="radio" id="radio" value={'Finished'} checked={status === 'Finished'} onChange={(e) => setStatus(e.target.value)} />
+                            <input type="radio" name="radio" id="radio" value={'Finalizado'} checked={status === 'Finalizado'} onChange={(e) => setStatus(e.target.value)} />
                             <span>Finalizado</span>
                         </div>
 
                         <label>Descrição</label>
                         <textarea placeholder='Descreva sua tarefa (opcional)' value={description} onChange={(e) => setDescription(e.target.value)} />
 
-                        <button>Registrar</button>
+                        <button type='submit'>Registrar</button>
 
                     </form>
                 </div>

@@ -52,6 +52,7 @@ export default function AuthProvider({ children }) {
                     uid: uid,
                     name: infoUser.data().name,
                     lastName: infoUser.data().lastName,
+                    nickname: infoUser.data().nickname,
                     avatar: infoUser.data().avatar,
                     email: infoUser.data().email
                 }
@@ -88,7 +89,7 @@ export default function AuthProvider({ children }) {
                     .doc(uid).set({
                         name: name,
                         lastName: lastName,
-                        nick: '',
+                        nickname: nickname,
                         email: email,
                         avatar: null
                     })
@@ -99,7 +100,7 @@ export default function AuthProvider({ children }) {
                             uid: uid,
                             name: name,
                             lastName: lastName,
-                            nick: '',
+                            nickname: nickname,
                             email: value.user.email,
                             avatarUrl: null
                         }

@@ -17,7 +17,7 @@ export default function Header() {
 
             <div className='image'>
                 <img src={user.avatar == null ? avatarDefault : user.avatar} alt={'Avatar User'} />
-                <p className="text-img">Olá, <span>{user.nick !== '' ? user.nick : user.name + ' ' + user.lastName}</span> </p>
+                <p className="text-img">Olá, <span>{user.nickname ? user.nickname : user.name + ' ' + user.lastName}</span> </p>
             </div>
 
             <Link to={'/dashboard'}>

@@ -14,7 +14,7 @@ export default function Profile() {
 
     const { user, setUser, storageUser } = useContext(AuthContext);
 
-    const [nickname, setNickname] = useState(user && user.nick);
+    const [nickname, setNickname] = useState(user && user.nickname);
     const [name, setName] = useState(user && user.name);
     const [lastName, setLastName] = useState(user && user.lastName);
     const [email, setEmail] = useState(user && user.email);
@@ -74,7 +74,7 @@ export default function Profile() {
                             .doc(user.uid)
                             .update({
                                 avatar: urlAvatar,
-                                nick: nickname,
+                                nickname: nickname,
                                 name: name,
                                 lastName: lastName
                             })
@@ -82,7 +82,7 @@ export default function Profile() {
                                 let data = {
                                     ...user,
                                     avatar: urlAvatar,
-                                    nick: nickname,
+                                    nickname: nickname,
                                     name: name,
                                     lastName: lastName
                                 }
@@ -99,14 +99,14 @@ export default function Profile() {
 
         if (name !== '' && lastName !== '' && avatars === null) {
             await firebase.firestore().collection('users').doc(user.uid).update({
-                nick: nickname,
+                nickname: nickname,
                 name: name,
                 lastName: lastName,
             })
                 .then(() => {
                     let data = {
                         ...user,
-                        nick: nickname,
+                        nickname: nickname,
                         name: name,
                         lastName: lastName,
                     };

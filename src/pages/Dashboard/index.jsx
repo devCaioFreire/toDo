@@ -20,8 +20,8 @@ export default function Dashboard() {
 
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
-    // const [calls, setCalls] = useState([]);
-    // const [doc, setDoc] = useState();
+    const [showModal, setShowModal] = useState(false);
+    const [detail, setDetail] = useState();
 
     useEffect(() => {
         async function loadCalls() {
@@ -65,6 +65,11 @@ export default function Dashboard() {
         setLoading(false);
     }
 
+    function togglePostModal(item) {
+        setShowModal(!showModal);
+        setDetail(item)
+    }
+
     return (
         <div>
             <Header />
@@ -106,15 +111,15 @@ export default function Dashboard() {
                                             <td data-label='Cliente'>{item.customer}</td>
                                             <td data-label='Assunto'>{item.subjectMatter}</td>
                                             <td data-label='Status'>
-                                                <span className='badge' style={{ backgroundColor: item.status === 'Open' ? '#1BCF6C' : item.status === 'Progress' ? '#0F2651' : '#999' }}>{item.status}</span>
+                                                <span className='badge' style={{ backgroundColor: item.status === 'Aberto' ? '#1BCF6C' : item.status === 'Em Progresso' ? '#0F2651' : '#999' }}>{item.status}</span>
                                             </td>
                                             <td data-label='Data'>{item.createdFormat}</td>
                                             <td data-label='#'>
-                                                <button className='action' style={{ backgroundColor: '#0A2241' }} onClick={() => togglePostModal(item)}>
-                                                    <RiSearchEyeFill color='#fff' size={17} />
+                                                <button className='action' style={{ backgroundColor: '#d9d9d9' }} onClick={() => togglePostModal(item)} >
+                                                    <RiSearchEyeFill color='#000' size={17} />
                                                 </button>
-                                                <Link className='action' style={{ backgroundColor: '#1F336F' }} to={`/new/${item.id}`}>
-                                                    <RiEditBoxFill color='#fff' size={17} />
+                                                <Link className='action' style={{ backgroundColor: '#d9d9d9' }} to={`/tasks/${item.id}`}>
+                                                    <RiEditBoxFill color='#000' size={17} />
                                                 </Link>
                                             </td>
                                         </tr>
