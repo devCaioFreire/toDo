@@ -1,8 +1,9 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from '../../context/auth';
 import avatarDefault from '../../assets/avatar.png';
 import { Link } from 'react-router-dom';
 import './header.css';
+import firebase from '../../service/firebaseConnection';
 
 import { FaTasks } from 'react-icons/fa';
 import { RiShieldUserFill, RiListSettingsLine } from 'react-icons/ri';
@@ -12,8 +13,11 @@ export default function Header() {
 
     const { user, Logout } = useContext(AuthContext);
 
+    const m = firebase.firestore().collection('modifications').doc(user.uid).get();
+    const colorSidebar = m.colorSidebar
+
     return (
-        <div className="sidebar">
+        <div className="sidebar" style={{ backgroundColor: '#1b1b1b' }}>
 
             <div className='image'>
                 <img src={user.avatar == null ? avatarDefault : user.avatar} alt={'Avatar User'} />

@@ -65,7 +65,7 @@ table {
     table-layout: fixed;
     box-shadow: 0px 0px 10px 2px rgba(255, 255, 255, 0.5);
     color: var(--light-grey);
-    margin-bottom: 5rem;
+    margin-bottom: 2rem;
     background-color: var(--light-grey);
 }
 
@@ -115,5 +115,26 @@ table td .action svg {
 }
 
 table td .action:hover {
+    opacity: 0.8;
+}
+
+.btn-more {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: .5rem;
+    background-color: #0F2651;
+    color: var(--white);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: .5rem;
+    box-shadow: 3px 5px 10px 2px rgba(0, 0, 0, 0.5);
+    transition: all .5s;
+    margin-bottom: 5rem;
+    text-align: center;
+}
+
+.btn-more:hover {
     opacity: 0.8;
 }

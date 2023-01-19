@@ -4,7 +4,7 @@ import Header from '../../components/Header';
 import Title from '../../components/Title';
 import firebase from '../../service/firebaseConnection';
 import { AuthContext } from '../../context/auth';
-import { format } from 'date-fns';
+import { format, set } from 'date-fns';
 
 import { RiDashboardFill, RiSearchEyeFill, RiEditBoxFill } from 'react-icons/ri';
 import { BsPlus } from 'react-icons/bs';
@@ -20,6 +20,9 @@ export default function Dashboard() {
 
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [doc, setDoc] = useState();
+    const [isEmpty, setIsEmpty] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [detail, setDetail] = useState();
 
@@ -58,16 +61,47 @@ export default function Dashboard() {
                     description: doc.data().description
                 })
             })
-            // const lastDoc = snapshot.docs[snapshot.docs.length - 1];
-            setTasks(list);
-            // setDoc(lastDoc);
+            const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+            setTasks([...tasks, ...list]);
+            setDoc(lastDoc);
         }
-        setLoading(false);
+        else {
+            setIsEmpty(true);
+        }
+        setLoadingMore(false);
     }
 
     function togglePostModal(item) {
         setShowModal(!showModal);
         setDetail(item)
+    }
+
+    async function handleMore() {
+        setLoadingMore(true);
+        await ref.startAfter(doc).limit(5)
+            .get()
+            .then((snapshot) => {
+                updateState(snapshot);
+            })
+    }
+
+    if (loading) {
+        return (
+            <div>
+                <Header />
+
+                <div className='container-title'>
+                    <Title name={'Dashboard'}>
+                        <RiDashboardFill color='#fff' size={20} />
+                    </Title>
+
+                    <div className='container-dashboard'>
+                        <span>Buscando Chamados...</span>
+                    </div>
+
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -127,6 +161,8 @@ export default function Dashboard() {
                                 })}
                             </tbody>
                         </table>
+                        {!loadingMore && !isEmpty && <button className='btn-more' onClick={handleMore}>Carregar Tarefas</button>}
+                        {loadingMore && <h3 className='btn-more'>Buscando dados...</h3>}
                     </>
                 )}
 

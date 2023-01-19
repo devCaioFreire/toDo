@@ -9,6 +9,11 @@ export default function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loadingAuth, setLoadingAuth] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [colorSidebar, setColorSidebar] = useState('#1b1b1b');
+    const [colorFont, setColorFont] = useState('#ffffff');
+    const [colorTheme, setColorTheme] = useState('#1e1f23');
+    const [colorButton, setColorButton] = useState('#0a2241');
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -125,7 +130,7 @@ export default function AuthProvider({ children }) {
     }
 
     return (
-        <AuthContext.Provider value={{ user, setUser, storageUser, loadingAuth, Login, Register, Logout }}>
+        <AuthContext.Provider value={{ user, setUser, storageUser, loadingAuth, Login, Register, Logout, colorSidebar, setColorSidebar,colorFont, setColorFont, colorTheme, setColorTheme,colorButton, setColorButton }}>
             {children}
         </AuthContext.Provider>
     )

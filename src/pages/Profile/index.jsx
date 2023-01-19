@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../../context/auth';
 import './profile.css';
 import Header from '../../components/Header';
@@ -20,6 +20,10 @@ export default function Profile() {
     const [email, setEmail] = useState(user && user.email);
     const [userAvatar, setUserAvatar] = useState(user && user.avatar);
     const [avatars, setAvatars] = useState(null);
+    const [colorSidebar, setColorSidebar] = useState('#1b1b1b');
+    const [colorFont, setColorFont] = useState('#ffffff');
+    const [colorTheme, setColorTheme] = useState('#1e1f23');
+    const [colorButton, setColorButton] = useState('#0a2241');
 
     // Trocando Avatar
     function handleFile(e) {
@@ -94,6 +98,7 @@ export default function Profile() {
             })
     }
 
+    // Salvar Modificações
     async function handleSave(e) {
         e.preventDefault();
 
@@ -117,17 +122,61 @@ export default function Profile() {
         else if (name !== '' && lastName !== '' && avatars !== null) {
             handleUpload();
         }
+
+        await firebase.firestore().collection('modifications').doc(user.uid).set({
+            colorSidebar: '#1b1b1b',
+            colorFont: '#ffffff',
+            colorTheme: '#1e1f23',
+            colorButton: '#0a2241'
+        });
     }
+
+    // Salvar Modificações de cores
+    async function handleSaveColors() {
+        await firebase.firestore().collection('modifications').doc(user.uid).update({
+            colorSidebar: colorSidebar,
+            colorFont: colorFont,
+            colorTheme: colorTheme,
+            colorButton: colorButton
+        });
+        // setColorSidebar(colorSidebar);
+        // setColorFont(colorFont);
+        // setColorTheme(colorTheme);
+        // setColorButton(colorButton);
+    }
+
+    // Código para restaurar as cores padrão
+    function handleRestore() {
+        setColorSidebar('#1b1b1b');
+        setColorFont('#ffffff');
+        setColorTheme('#1e1f23');
+        setColorButton('#0a2241');
+    }
+
+    // Puxando cores do banco de dados
+    useEffect(() => {
+        async function loadColors() {
+            const doc = await firebase.firestore().collection('modifications').doc(user.uid).get();
+            if (doc.exists) {
+                const data = doc.data();
+                setColorSidebar(data.colorSidebar);
+                setColorFont(data.colorFont);
+                setColorTheme(data.colorTheme);
+                setColorButton(data.colorButton);
+            }
+        }
+        loadColors();
+    }, [user.uid]);
 
     return (
         <div>
             <Header />
-            <div className='container-title'>
+            <div className='container-title' >
                 <Title name={'Configuração'}>
                     < IoSettingsOutline size={20} />
                 </Title>
 
-                <div className="container-profile">
+                <div className="container-profile" style={{ backgroundColor: colorTheme }}>
 
                     <form className="form-profile" onSubmit={handleSave}>
 
@@ -160,42 +209,42 @@ export default function Profile() {
                             <label>E-mail</label>
                             <input type="email" value={email} disabled={true} />
 
-                            <button type={'submit'}>Salvar</button>
+                            <button type={'submit'} style={{ backgroundColor: colorButton }}>Salvar</button>
                         </div>
                     </form>
                 </div>
 
-                <div className="settings-nav">
+                <div className="settings-nav" style={{ backgroundColor: colorTheme }}>
 
-                    <h3>Escolha a cor do tema</h3>
+                    <h3>Escolha sua paleta de cores</h3>
 
                     <div className="color">
 
                         <div className="sidebarColor">
                             <label>Sidebar</label>
-                            <input type="color" value={'#1B1B1B'} id="sidebarColor" />
+                            <input type="color" value={colorSidebar} onChange={(e) => setColorSidebar(e.target.value)} id="sidebarColor" />
                         </div>
 
                         <div className="font-color">
                             <label>Font</label>
-                            <input type="color" value={'#D9D9D9'} id="fontColor" />
+                            <input type="color" value={colorFont} onChange={(e) => setColorFont(e.target.value)} id="fontColor" />
                         </div>
 
                         <div className="theme">
                             <label>Tema</label>
-                            <input type="color" value={'#1E1F23'} id="themeColor" />
+                            <input type="color" value={colorTheme} onChange={(e) => setColorTheme(e.target.value)} id="themeColor" />
                         </div>
 
                         <div className="btns">
                             <label>Botões</label>
-                            <input type="color" value={'#0A2241'} id="btnColor" />
+                            <input type="color" value={colorButton} onChange={(e) => setColorButton(e.target.value)} id="btnColor" />
                         </div>
 
                     </div>
 
                     <div className="areaBtn">
-                        <button>Restaurar</button>
-                        <button>Salvar</button>
+                        <button onClick={handleRestore} style={{ backgroundColor: colorButton }}>Restaurar</button>
+                        <button onClick={handleSaveColors} style={{ backgroundColor: colorButton }}>Salvar</button>
                     </div>
 
                 </div>
